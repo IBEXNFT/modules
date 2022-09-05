@@ -1,9 +1,10 @@
 {
   "name": "@orbisclub/modules",
-  "version": "1.0.0",
+  "version": "0.0.39",
   "description": "Decentralized social modules created with the Orbis SDK",
   "author": "OrbisWeb3",
   "license": "MIT",
+  "type": "module",
   "repository": "OrbisWeb3/modules",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
@@ -11,9 +12,14 @@
   "engines": {
     "node": ">=10"
   },
+  "babel": {
+    "presets": [
+      "@babel/preset-react"
+    ]
+  },
   "scripts": {
-    "build": "microbundle-crl --no-compress --format modern,cjs",
-    "start": "microbundle-crl watch --no-compress --format modern,cjs",
+    "build": "microbundle-crl --css-modules true --no-compress --format modern,esm",
+    "start": "microbundle-crl --css-modules true watch --no-compress --format modern,esm",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",
@@ -24,10 +30,12 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": "^18.0.0",
+    "@orbisclub/orbis-sdk": "^0.2.98",
+    "ethereum-blockies-base64": "^1.0.2"
   },
   "devDependencies": {
-    "microbundle-crl": "^0.13.10",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
     "babel-eslint": "^10.0.3",
     "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
@@ -41,11 +49,14 @@
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-standard": "^4.0.1",
     "gh-pages": "^2.2.0",
+    "microbundle-crl": "^0.13.10",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.4",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "^3.4.1"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-scripts": "^3.4.1",
+    "@orbisclub/orbis-sdk": "^0.2.98",
+    "ethereum-blockies-base64": "^1.0.2"
   },
   "files": [
     "dist"

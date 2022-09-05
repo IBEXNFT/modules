@@ -1,6 +1,9 @@
 import React from 'react'
-import styles from './styles.module.css'
+import { ChatBox } from "./ChatBox/index.js";
+import styles from './ChatBox/ChatBox.module.css';
 
 export const ExampleComponent = ({ text }) => {
-  return <div className={styles.test}>Example Component: {text}</div>
+  return <ChatBox/>
 }
+
+export { ChatBox };

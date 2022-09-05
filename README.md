@@ -13,15 +13,14 @@ npm install --save @orbisclub/modules
 ## Usage
 
 ```jsx
-import React, { Component } from 'react'
+import { ChatBox } from '@orbisclub/modules'
+import "@orbisclub/modules/dist/index.modern.css";
 
-import MyComponent from '@orbisclub/modules'
-import '@orbisclub/modules/dist/index.css'
-
-class Example extends Component {
-  render() {
-    return <MyComponent />
-  }
+function App() {
+  /** The context parameter in the <ChatBox/> object must be your group or channel id or a custom string */
+  return(
+    <ChatBox context="kjzl6cwe1jw147b42j1yjoxyzrzeg3czq5mjm1lrmg5eeq43yutje3f2s0s2n5h" poweredByOrbis="black" />
+  );
 }
 ```
 
