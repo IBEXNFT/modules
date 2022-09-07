@@ -6,28 +6,28 @@ import makeBlockie from 'ethereum-blockies-base64';
 
 /** Initialize the Orbis class object */
 let _orbis = new Orbis();
-let _themes = {};
+let _theme = {};
 
-export function ChatBox({orbis, context, themes, poweredByOrbis}) {
+export function ChatBox({orbis, context, theme, poweredByOrbis, title = "Ask your questions to our community."}) {
   /** Save theme passed as prop globally */
-  if(themes) {
-    _themes = themes;
+  if(theme) {
+    _theme = theme;
   }
 
   /** Return ChatBox */
   if(orbis) {
     return(
-      <ChatBoxContent orbis={orbis} context={context} poweredByOrbis={poweredByOrbis} />
+      <ChatBoxContent title={title} orbis={orbis} context={context} poweredByOrbis={poweredByOrbis} />
     )
   } else {
     return(
-      <ChatBoxContent orbis={_orbis} context={context} poweredByOrbis={poweredByOrbis} />
+      <ChatBoxContent title={title} orbis={_orbis} context={context} poweredByOrbis={poweredByOrbis} />
     );
   }
 }
 
 /** Orbis contact module */
-function ChatBoxContent({orbis, context, poweredByOrbis}) {
+function ChatBoxContent({orbis, context, poweredByOrbis, title}) {
   const [user, setUser] = useState();
   const [expanded, setExpanded] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -107,7 +107,7 @@ function ChatBoxContent({orbis, context, poweredByOrbis}) {
   return(
     <div className={styles.chatBoxContainer}>
       {/** CTA to open the contact module */}
-      <div className={styles.chatBoxContainerCta} style={_themes.mainCta} onClick={() => setExpanded(!expanded)}>
+      <div className={styles.chatBoxContainerCta} style={_theme.mainCta} onClick={() => setExpanded(!expanded)}>
         {expanded ?
           <img src="https://ylgfjdlgyjmdikqavpcj.supabase.co/storage/v1/object/public/orbis-sdk-modules/icons/question-close.png?t=2022-08-16T15%3A44%3A35.039Z" height="27" />
         :
@@ -118,14 +118,16 @@ function ChatBoxContent({orbis, context, poweredByOrbis}) {
       {/** Expanded view of the contact module */}
       {expanded &&
         <div className={styles.chatBoxContainerExpanded}>
-          <div className={styles.chatBoxHead} style={_themes.header}>
-            <p>Ask your questions to the Cerscan community.</p>
+          <div className={styles.chatBoxHead} style={_theme.header}>
+            {title != null &&
+              <p>{title}</p>
+            }
             <p style={{marginTop: 5}}>
               <PoweredByOrbis />
             </p>
           </div>
           {/** List messages sent in the group */}
-          <div className={styles.chatBoxMessagesContainer} style={_themes.messagesContainer}>
+          <div className={styles.chatBoxMessagesContainer} style={_theme.messagesContainer}>
             {loading &&
               <p style={{width: "100%", textAlign: "center" }}><img src="https://ylgfjdlgyjmdikqavpcj.supabase.co/storage/v1/object/public/orbis-sdk-modules/icons/question-spinner-black.png?t=2022-08-16T15%3A45%3A06.071Z" className={styles.loadingSpinner}/></p>
             }
@@ -138,7 +140,7 @@ function ChatBoxContent({orbis, context, poweredByOrbis}) {
           </div>
 
           {/** Display input */}
-          <div className={styles.chatBoxInputContainer} style={_themes.footer}>
+          <div className={styles.chatBoxInputContainer} style={_theme.footer}>
           {user ?
             <MessageBox
               orbis={orbis}
@@ -188,11 +190,11 @@ function Message({user, message, reply, replyTo}) {
       <div className={styles.flexColumn}>
         {message.reply_to &&
           <div className={styles.flexRow}>
-            <div className={styles.chatBoxOneMessageReplyLine}  style={_themes.replyLine}></div>
-            <div className={styles.chatBoxOneMessageReply} style={_themes.replyText}>{message.reply_to_details && message.reply_to_details.body && message.reply_to_details.body.length > 40 ? shortMessage(message.reply_to_details.body, 40) : message.reply_to_details.body }</div>
+            <div className={styles.chatBoxOneMessageReplyLine}  style={_theme.replyLine}></div>
+            <div className={styles.chatBoxOneMessageReply} style={_theme.replyText}>{message.reply_to_details && message.reply_to_details.body && message.reply_to_details.body.length > 40 ? shortMessage(message.reply_to_details.body, 40) : message.reply_to_details.body }</div>
           </div>
         }
-        <div className={styles.chatBoxOneSupportMessage} style={user && message.creator == user.did ? _themes.messageSent : _themes.messageReceived}><p>{message.content.body}</p></div>
+        <div className={styles.chatBoxOneSupportMessage} style={user && message.creator == user.did ? _theme.messageSent : _theme.messageReceived}><p>{message.content.body}</p></div>
       </div>
 
       {/** Right-side PfP */}
@@ -308,18 +310,18 @@ function MessageBox({user, orbis, context, messages, setMessages, replyTo, reply
         <input
           ref={contactInput}
           className={styles.chatBoxInput}
-          style={_themes.input}
+          style={_theme.input}
           placeholder="Type your message"
           disabled={sending}
           value={message}
           onChange={(e) => setMessage(e.target.value)} />
         <div className={styles.chatBoxSubmitContainer}>
           {sending ?
-            <button className={styles.chatBoxSubmit} style={_themes && _themes.mainCta ? _themes.mainCta : null}>
+            <button className={styles.chatBoxSubmit} style={_theme && _theme.mainCta ? _theme.mainCta : null}>
               <img src= "https://ylgfjdlgyjmdikqavpcj.supabase.co/storage/v1/object/public/orbis-sdk-modules/icons/question-spinner-white.png?t=2022-08-16T15%3A44%3A56.022Z" className={styles.loadingSpinner} />
             </button>
           :
-            <button className={styles.chatBoxSubmit} style={_themes && _themes.mainCta ? _themes.mainCta : null} onClick={() => sendMessage()}>
+            <button className={styles.chatBoxSubmit} style={_theme && _theme.mainCta ? _theme.mainCta : null} onClick={() => sendMessage()}>
               <img src="https://ylgfjdlgyjmdikqavpcj.supabase.co/storage/v1/object/public/orbis-sdk-modules/icons/question-send.png?t=2022-08-16T15%3A45%3A33.759Z" />
             </button>
           }
@@ -352,7 +354,7 @@ export function ConnectButton({orbis, user, setUser}) {
 
   if(loading) {
     return(
-      <div className={styles.btnBlack} style={_themes.connectBtn}>
+      <div className={styles.btnBlack} style={_theme.connectBtn}>
         <img src= "https://ylgfjdlgyjmdikqavpcj.supabase.co/storage/v1/object/public/orbis-sdk-modules/icons/question-spinner-white.png?t=2022-08-16T15%3A44%3A56.022Z" height="18" className={styles.loadingSpinner} />
       </div>
     )
@@ -361,9 +363,9 @@ export function ConnectButton({orbis, user, setUser}) {
   return(
     <div>
       {user ?
-        <div className={styles.btnBlack} style={_themes && _themes.connectBtn ? _themes.connectBtn : null}>Connected</div>
+        <div className={styles.btnBlack} style={_theme && _theme.connectBtn ? _theme.connectBtn : null}>Connected</div>
       :
-        <div className={styles.btnBlack} style={_themes && _themes.connectBtn ? _themes.connectBtn : null} onClick={() => connect()}>Connect</div>
+        <div className={styles.btnBlack} style={_theme && _theme.connectBtn ? _theme.connectBtn : null} onClick={() => connect()}>Connect</div>
       }
     </div>
   )
